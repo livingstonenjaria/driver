@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/home_menu"
+        android:icon="@drawable/outline_location"
+        android:title="@string/bottom_home_text" />
+    <item
+        android:id="@+id/earnings_menu"
+        android:icon="@drawable/outline_attach_money"
+        android:title="@string/bottom_earnings_text" />
+    <item
+        android:id="@+id/ratings_menu"
+        android:icon="@drawable/outline_star"
+        android:title="@string/bottom_ratings_text" />
+    <item
+        android:id="@+id/settings_menu"
+        android:icon="@drawable/outline_settings"
+        android:title="@string/bottom_settings_txt" />
+</menu>

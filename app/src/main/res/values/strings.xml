@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Chauffeur Driver</string>
+    <string name="bottom_home_text">Home</string>
+    <string name="bottom_earnings_text">Earnings</string>
+    <string name="bottom_ratings_text">Ratings</string>
+    <string name="bottom_settings_txt">Settings</string>
+    <string name="google_maps_API_key">AIzaSyDp8lCPGhGE5uhyqlUWZhS0t_uQajW5yhg</string>
+    <string name="google_maps_API">AIzaSyBvfzFgDQZQjThxa3MgCUczuKTreOWsAkk</string>
+    <string name="title">C H A F F E U R</string>
+    <string name="ok">OK</string>
+    <string name="existingemail">The email address you entered is already in use. Please use a different email address.</string>
+    <string name="malformedemail">You have entered an icorrect email please edit the email address before trying to register again.</string>
+    <string name="weakpass">The password you entered is very weak please enter a stronger password before trying to register again.</string>
+</resources>

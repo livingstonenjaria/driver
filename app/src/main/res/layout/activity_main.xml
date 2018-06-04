@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:id="@+id/search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/edtPlace"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:hint="Destination" />
+
+        <Button
+            android:id="@+id/btnGo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Go" />
+    </LinearLayout>
+
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="516dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_below="@id/search"
+        android:layout_marginTop="51dp"
+        tools:context=".MapsActivity">
+
+
+    </fragment>
+
+    <com.github.glomadrian.materialanimatedswitch.MaterialAnimatedSwitch
+        android:id="@+id/availability"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="24dp"
+        android:layout_marginEnd="15dp"
+        android:scaleX="1.5"
+        android:scaleY="1.5"
+        app:ball_press_color="@color/colorWhite"
+        app:ball_release_color="@color/colorWhite"
+        app:base_press_color="@color/colorGreen"
+        app:base_release_color="@color/colorRed"
+        app:icon_press="@drawable/ic_location"
+        app:icon_release="@drawable/ic_location_off_black_24dp"/>
+
+</RelativeLayout>
