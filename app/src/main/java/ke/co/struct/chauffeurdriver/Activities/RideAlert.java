@@ -22,6 +22,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.RoundCap;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,6 +35,7 @@ import ke.co.struct.chauffeurdriver.R;
 import ke.co.struct.chauffeurdriver.Remote.Common;
 import ke.co.struct.chauffeurdriver.Remote.IFCMService;
 import ke.co.struct.chauffeurdriver.Remote.MGoogleApi;
+import ke.co.struct.chauffeurdriver.model.Driver;
 import ke.co.struct.chauffeurdriver.model.FCMResponse;
 import ke.co.struct.chauffeurdriver.model.Notification;
 import ke.co.struct.chauffeurdriver.model.Sender;
@@ -86,12 +88,33 @@ public class RideAlert extends AppCompatActivity {
         btnAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                sendDriverDetails(riderid);
                 Intent intent = new Intent(RideAlert.this, DriverTrackingActivity.class);
                 intent.putExtra("lat",lat);
                 intent.putExtra("lng",lng);
                 intent.putExtra("rider",riderid);
                 startActivity(intent);
                 finish();
+            }
+        });
+    }
+
+    private void sendDriverDetails(String riderid) {
+        Token token = new Token(riderid);
+        String details = new Gson().toJson(Driver.class);
+        Notification notification = new Notification("Accepted", details);
+        Sender sender = new Sender(token.getToken(), notification);
+        ifcmService.sendMessage(sender).enqueue(new Callback<FCMResponse>() {
+            @Override
+            public void onResponse(Call<FCMResponse> call, Response<FCMResponse> response) {
+                if (response.body().success != 1){
+                    Toast.makeText(RideAlert.this, "Failed", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<FCMResponse> call, Throwable t) {
+                t.printStackTrace();
             }
         });
     }
