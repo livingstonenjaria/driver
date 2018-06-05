@@ -41,7 +41,7 @@
     </fragment>
 
     <com.github.glomadrian.materialanimatedswitch.MaterialAnimatedSwitch
-        android:id="@+id/availability"
+        android:id="@+id/location_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

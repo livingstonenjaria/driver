@@ -1,11 +1,15 @@
 package ke.co.struct.chauffeurdriver.Activities;
 
 import android.animation.ValueAnimator;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 import android.view.animation.LinearInterpolator;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +34,10 @@ import ke.co.struct.chauffeurdriver.R;
 import ke.co.struct.chauffeurdriver.Remote.Common;
 import ke.co.struct.chauffeurdriver.Remote.IFCMService;
 import ke.co.struct.chauffeurdriver.Remote.MGoogleApi;
+import ke.co.struct.chauffeurdriver.model.FCMResponse;
+import ke.co.struct.chauffeurdriver.model.Notification;
+import ke.co.struct.chauffeurdriver.model.Sender;
+import ke.co.struct.chauffeurdriver.model.Token;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -39,6 +47,11 @@ public class RideAlert extends AppCompatActivity {
     MediaPlayer mediaPlayer;
     private static final String TAG = "RideAlert";
     private MGoogleApi mService;
+    private IFCMService ifcmService;
+    private Button btnAccept, btnDecline;
+    private String riderid;
+    private Double lat,lng;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,16 +60,64 @@ public class RideAlert extends AppCompatActivity {
         txtTime = findViewById(R.id.txtTime);
         txtAddress = findViewById(R.id.txtAddress);
         txtDistance = findViewById(R.id.txtDistance);
+        btnAccept = findViewById(R.id.btnAccept);
+        btnDecline = findViewById(R.id.btnDecline);
+
         mediaPlayer = MediaPlayer.create(this, R.raw.drivernotification);
-        mediaPlayer.setLooping(true);
+        mediaPlayer.setLooping(false);
         mediaPlayer.start();
 
+        ifcmService = Common.getFCMService();
+        mService = Common.getGoogleApi();
         if (getIntent() != null){
-            double lat = getIntent().getDoubleExtra("lat", -1.0);
-            double lng = getIntent().getDoubleExtra("lng", -1.0);
+             lat = getIntent().getDoubleExtra("lat", -1.0);
+             lng = getIntent().getDoubleExtra("lng", -1.0);
+            riderid = getIntent().getStringExtra("rider");
             getDirection(lat, lng);
         }
+        btnDecline.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!TextUtils.isEmpty(riderid)){
+                    cancelBooking(riderid);
+                }
+            }
+        });
+        btnAccept.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(RideAlert.this, DriverTrackingActivity.class);
+                intent.putExtra("lat",lat);
+                intent.putExtra("lng",lng);
+                intent.putExtra("rider",riderid);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
+
+    private void cancelBooking(String riderid) {
+        Token token = new Token(riderid);
+        Notification notification = new Notification("Cancelled", "Driver has cancelled your request");
+        Sender sender = new Sender(token.getToken(), notification);
+        ifcmService.sendMessage(sender)
+                .enqueue(new retrofit2.Callback<FCMResponse>() {
+                    @Override
+                    public void onResponse(Call<FCMResponse> call, Response<FCMResponse> response) {
+                        if (response.body().success == 1){
+                            Toast.makeText(RideAlert.this, "Cancelled", Toast.LENGTH_SHORT).show();
+                            finish();
+                        }else{
+                            Toast.makeText(RideAlert.this, "Failed to cancel", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    @Override
+                    public void onFailure(Call<FCMResponse> call, Throwable t) {
+                        Log.e(TAG, "onFailure:  "+t.getMessage() );
+                    }
+                });
+    }
+
     private void getDirection(double lat, double lng) {
         String requestApi = null;
         try{

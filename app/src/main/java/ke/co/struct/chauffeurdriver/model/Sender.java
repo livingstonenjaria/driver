@@ -2,13 +2,13 @@ package ke.co.struct.chauffeurdriver.model;
 
 public class Sender {
         public String to;
-        public Data data;
+        public Notification notification;
     public Sender() {
     }
 
-    public Sender(String to, Data data) {
+    public Sender(String to, Notification notification) {
         this.to = to;
-        this.data = data;
+        this.notification = notification;
     }
 
     public String getTo() {
@@ -19,11 +19,11 @@ public class Sender {
         this.to = to;
     }
 
-    public Data getData() {
-        return data;
+    public Notification getNotification() {
+        return notification;
     }
 
-    public void setData(Data data) {
-        this.data = data;
+    public void setNotification(Notification notification) {
+        this.notification = notification;
     }
 }

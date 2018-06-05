@@ -111,6 +111,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "1009972726740-o9k2lr3v232h8dlp6r437nkkmh5gt0hf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ke.co.struct.chauffeurdriver",
+            "certificate_hash": "823c92187b1c83256eb64c8aeb11dfb5d0946342"
+          }
+        },
+        {
           "client_id": "1009972726740-cnkku0m6ietkek3lpg2oesk24ucr5o6k.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

@@ -1,12 +1,12 @@
 package ke.co.struct.chauffeurdriver.model;
 
-public class Data {
+public class Notification {
     public String title;
     public String body;
-    public Data() {
+    public Notification() {
     }
 
-    public Data(String title, String body) {
+    public Notification(String title, String body) {
         this.title = title;
         this.body = body;
     }

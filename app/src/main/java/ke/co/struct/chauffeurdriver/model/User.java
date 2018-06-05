@@ -19,6 +19,8 @@ public class User {
         return phone;
     }
 
+    public User() {
+    }
     public User(String name, String email, String password, String phone) {
         this.name = name;
         this.email = email;

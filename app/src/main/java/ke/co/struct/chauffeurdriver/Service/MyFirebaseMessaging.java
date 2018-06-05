@@ -16,6 +16,12 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
         Intent intent = new Intent(getBaseContext(), RideAlert.class);
         intent.putExtra("lat", rider_location.latitude);
         intent.putExtra("lng", rider_location.longitude);
+        intent.putExtra("rider",remoteMessage.getNotification().getTitle());
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
+    }
+
+    private void sendnotification(LatLng rider_location) {
+
     }
 }

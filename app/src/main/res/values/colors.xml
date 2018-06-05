@@ -7,5 +7,8 @@
     <color name="colorGreen">#2ECC71</color>
     <color name="colorWhite">#ECF0F1</color>
     <color name="colorPurple">#673BB7</color>
-
+    <color name="colorLightPurle">#9879DB</color>
+    <color name="colorLightBlue">#1FBAD6</color>
+    <color name="colorOffWhite">#FCF8F7</color>
+    <color name="asbestos">#7f8c8d</color>
 </resources>
