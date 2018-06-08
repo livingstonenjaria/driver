@@ -10,6 +10,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import ke.co.struct.chauffeurdriver.R;
+
 public class RideTrackingActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
