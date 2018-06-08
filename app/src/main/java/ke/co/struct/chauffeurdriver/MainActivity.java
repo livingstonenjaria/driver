@@ -59,6 +59,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -193,6 +194,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         Common.current_driver = dataSnapshot.getValue(Driver.class);
+
                     }
 
                     @Override
@@ -200,8 +202,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                     }
                 });
-        String details = new Gson().toJson(Driver.class);
-        Log.d(TAG, "driverinfo: "+details);
+
+
 
     }
 

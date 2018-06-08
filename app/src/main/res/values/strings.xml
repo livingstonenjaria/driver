@@ -12,4 +12,5 @@
     <string name="malformedemail">You have entered an icorrect email please edit the email address before trying to register again.</string>
     <string name="weakpass">The password you entered is very weak please enter a stronger password before trying to register again.</string>
     <string name="title_activity_driver_tracking">Map</string>
+    <string name="title_activity_ride_tracking">Map</string>
 </resources>

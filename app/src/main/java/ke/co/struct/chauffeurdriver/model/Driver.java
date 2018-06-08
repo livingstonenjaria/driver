@@ -7,13 +7,13 @@ public class Driver {
     public Driver() {
     }
 
-    public Driver(String name, String phone, String carType, String carimg, String licPlate, String profileImageUrl) {
+    public Driver(String name, String phone, String carType, String carimg, String licPlate, String ProfileImageUrl) {
         this.name = name;
         this.phone = phone;
         this.carType = carType;
         this.carimg = carimg;
         this.licPlate = licPlate;
-        ProfileImageUrl = profileImageUrl;
+        this.ProfileImageUrl = ProfileImageUrl;
     }
 
     public String getName() {

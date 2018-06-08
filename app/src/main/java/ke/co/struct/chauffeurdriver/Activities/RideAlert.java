@@ -53,6 +53,7 @@ public class RideAlert extends AppCompatActivity {
     private Button btnAccept, btnDecline;
     private String riderid;
     private Double lat,lng;
+    private Driver driver;
 
 
     @Override
@@ -100,9 +101,24 @@ public class RideAlert extends AppCompatActivity {
     }
 
     private void sendDriverDetails(String riderid) {
+        driver = Common.current_driver;
         Token token = new Token(riderid);
-        String details = new Gson().toJson(Driver.class);
-        Notification notification = new Notification("Accepted", details);
+        JSONObject details = new JSONObject();
+        try {
+                details.put("name",driver.getName());
+                details.put("phone", driver.getPhone());
+                details.put("carType", driver.getCarType());
+                details.put("carimg", driver.getCarimg());
+                details.put("licPlate", driver.getLicPlate());
+                details.put("ProfileImageUrl", driver.getProfileImageUrl());
+                Log.d(TAG, "driverinfo: " + details);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+//        Bundle bundle = new Bundle();
+//        bundle.putString("json", details.toString());
+        Notification notification = new Notification("Accepted",details.toString());
         Sender sender = new Sender(token.getToken(), notification);
         ifcmService.sendMessage(sender).enqueue(new Callback<FCMResponse>() {
             @Override

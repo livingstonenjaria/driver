@@ -45,7 +45,10 @@
         <activity android:name=".Activities.RideAlert" />
         <activity
             android:name=".Activities.DriverTrackingActivity"
-            android:label="@string/title_activity_driver_tracking"></activity>
+            android:label="@string/title_activity_driver_tracking" />
+        <activity
+            android:name=".Activities.RideTrackingActivity"
+            android:label="@string/title_activity_ride_tracking"></activity>
     </application>
 
 </manifest>
