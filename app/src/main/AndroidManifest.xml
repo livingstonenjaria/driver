@@ -21,18 +21,17 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <service android:name=".Service.MyFirebaseService">
+        <service android:name=".service.MyFirebaseInstanceIdService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-        <service android:name=".Service.MyFirebaseMessaging">
+        <service android:name=".service.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
-        <activity android:name=".MainActivity" />
         <activity android:name=".LandingPage">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -42,13 +41,23 @@
         </activity>
         <activity android:name=".LoginActivity" />
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".Activities.RideAlert" />
+        <activity android:name=".activities.RideAlert" />
         <activity
-            android:name=".Activities.DriverTrackingActivity"
+            android:name=".activities.DriverTrackingActivity"
             android:label="@string/title_activity_driver_tracking" />
         <activity
-            android:name=".Activities.RideTrackingActivity"
-            android:label="@string/title_activity_ride_tracking"></activity>
+            android:name=".activities.RideTrackingActivity"
+            android:label="@string/title_activity_ride_tracking" />
+        <activity
+            android:name=".DriverHomeActivity"
+            android:hardwareAccelerated="true"
+            android:label="@string/title_activity_driver_home"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activities.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:theme="@style/AppTheme"
+         />
     </application>
 
 </manifest>
