@@ -8,7 +8,7 @@
         android:title="@string/bottom_home_text" />
     <item
         android:id="@+id/earnings_menu"
-        android:icon="@drawable/outline_attach_money"
+        android:icon="@drawable/outline_earnings"
         android:title="@string/bottom_earnings_text" />
     <item
         android:id="@+id/ratings_menu"
