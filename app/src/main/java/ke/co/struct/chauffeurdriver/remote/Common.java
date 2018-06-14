@@ -19,6 +19,7 @@ public class Common {
     public static final String notifications = "notifications";
     public static final String baseUrl = "https://maps.googleapis.com";
     public static final String fcmURL = "https://fcm.googleapis.com";
+    public static  Double trip = 0.0;
     public static final int PICK_IMAGE_REQUEST = 9999;
     public static Driver current_driver;
     public static FirebaseAuth auth = FirebaseAuth.getInstance();

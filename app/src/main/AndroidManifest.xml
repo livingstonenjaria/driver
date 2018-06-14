@@ -56,8 +56,9 @@
         <activity
             android:name=".activities.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:theme="@style/AppTheme"
-         />
+            android:theme="@style/AppTheme" />
+        <activity android:name=".activities.PaymentActivity" />
+        <activity android:name=".activities.DriverEarnings"></activity>
     </application>
 
 </manifest>

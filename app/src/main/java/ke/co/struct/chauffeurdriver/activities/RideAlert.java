@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.rengwuxian.materialedittext.MaterialEditText;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,14 +34,14 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class RideAlert extends AppCompatActivity {
-    private TextView txtAddress, txtTime, txtDistance;
+    private MaterialEditText txtAddress, txtTime, txtDistance, txtName;
     MediaPlayer mediaPlayer;
     private static final String TAG = "RideAlert";
     private MGoogleApi mService;
     private IFCMService ifcmService;
     private Button btnAccept, btnDecline;
-    private String riderid;
-    private Double lat,lng;
+    private String riderid, phone, name, pushid;
+    private Double lat,lng,destlat,destlng;
     private Driver driver;
 
 
@@ -48,6 +50,7 @@ public class RideAlert extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ride_alert);
         txtTime = findViewById(R.id.txtTime);
+        txtName = findViewById(R.id.riderName);
         txtAddress = findViewById(R.id.txtAddress);
         txtDistance = findViewById(R.id.txtDistance);
         btnAccept = findViewById(R.id.btnAccept);
@@ -63,7 +66,14 @@ public class RideAlert extends AppCompatActivity {
              lat = getIntent().getDoubleExtra("lat", -1.0);
              lng = getIntent().getDoubleExtra("lng", -1.0);
             riderid = getIntent().getStringExtra("rider");
+            name = getIntent().getStringExtra("name");
+            phone = getIntent().getStringExtra("phone");
+            pushid = getIntent().getStringExtra("pushid");
+            destlat = getIntent().getDoubleExtra("destlat", -1.0);
+            destlng = getIntent().getDoubleExtra("destlng", -1.0);
+            txtName.setText(name);
             getDirection(lat, lng);
+
         }
         btnDecline.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,6 +91,11 @@ public class RideAlert extends AppCompatActivity {
                 intent.putExtra("lat",lat);
                 intent.putExtra("lng",lng);
                 intent.putExtra("rider",riderid);
+                intent.putExtra("name",name);
+                intent.putExtra("phone",phone);
+                intent.putExtra("pushid", pushid);
+                intent.putExtra("destlat", destlat);
+                intent.putExtra("destlng", destlng);
                 startActivity(intent);
                 finish();
             }
@@ -107,7 +122,13 @@ public class RideAlert extends AppCompatActivity {
 //        bundle.putString("json", details.toString());
         Map<String,String> content = new HashMap<>();
         content.put("title","Accepted");
-        content.put("message",details.toString());
+        content.put("message",String.format("%s has accepted your request",Common.current_driver.getName()));
+        content.put("name",driver.getName());
+        content.put("phone", driver.getPhone());
+        content.put("carType", driver.getCarType());
+        content.put("carimg", driver.getCarimg());
+        content.put("licPlate", driver.getLicPlate());
+        content.put("ProfileImageUrl", driver.getProfileImageUrl());
         DataMessage dataMessage = new DataMessage(token.getToken(), content);
         ifcmService.sendMessage(dataMessage).enqueue(new Callback<FCMResponse>() {
             @Override
@@ -194,19 +215,19 @@ public class RideAlert extends AppCompatActivity {
 
     @Override
     protected void onStop() {
-        mediaPlayer.release();
+//        mediaPlayer.release();
         super.onStop();
     }
 
     @Override
     protected void onPause() {
-        mediaPlayer.release();
+//        mediaPlayer.release();
         super.onPause();
     }
 
     @Override
     protected void onResume() {
-        mediaPlayer.start();
+//        mediaPlayer.start();
         super.onResume();
     }
 }

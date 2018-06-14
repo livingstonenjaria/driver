@@ -7,14 +7,15 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -32,9 +33,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
@@ -86,6 +90,7 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import dmax.dialog.SpotsDialog;
+import ke.co.struct.chauffeurdriver.activities.DriverEarnings;
 import ke.co.struct.chauffeurdriver.remote.Common;
 import ke.co.struct.chauffeurdriver.remote.MGoogleApi;
 import ke.co.struct.chauffeurdriver.activities.SettingsActivity;
@@ -123,7 +128,7 @@ public class DriverHomeActivity extends AppCompatActivity
     private LocationRequest mLocationRequest;
     private GoogleApiClient mGoogleApiClient;
     private LocationCallback locationCallback;
-    private MaterialAnimatedSwitch location_switch;
+    private ToggleButton location_switch;
     private Boolean mLocationPermissionGranted = false;
     private GoogleMap mMap;
     private FusedLocationProviderClient mFusedLocationProviderClient;
@@ -146,7 +151,7 @@ public class DriverHomeActivity extends AppCompatActivity
     private CoordinatorLayout homeRoot;
     private CircleImageView profile_pic;
     private TextView driver_name, driver_email;
-
+    private static Bundle bundle = new Bundle();
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
@@ -209,12 +214,16 @@ public class DriverHomeActivity extends AppCompatActivity
             }
         });
         if (mLocationPermissionGranted) {
-            location_switch.setOnCheckedChangeListener(new MaterialAnimatedSwitch.OnCheckedChangeListener() {
+            location_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
-                public void onCheckedChanged(boolean isOnline) {
-                    if (isOnline) {
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
                         // getDeviceLocation();
-
+                        SharedPreferences sharedPreferences = PreferenceManager
+                                .getDefaultSharedPreferences(getApplicationContext());
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putBoolean("toggleButton", location_switch.isChecked());
+                        editor.commit();
                         if (ActivityCompat.checkSelfPermission(DriverHomeActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(DriverHomeActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                             return;
                         }
@@ -225,10 +234,19 @@ public class DriverHomeActivity extends AppCompatActivity
                         displayLocation();
 
                     } else {
+                        SharedPreferences sharedPreferences = PreferenceManager
+                                .getDefaultSharedPreferences(getApplicationContext());
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putBoolean("toggleButton", location_switch.isChecked());
+                        editor.commit();
                         mFusedLocationProviderClient.removeLocationUpdates(locationCallback);
                         Common.database.goOffline();
-                        mCurrent.remove();
-                        mMap.clear();
+                        if (mCurrent != null) {
+                            mCurrent.remove();
+                        }
+                        if (mMap != null) {
+                            mMap.clear();
+                        }
                         if (handler != null){
                             handler.removeCallbacks(drawPathRunnable);
                         }
@@ -236,7 +254,11 @@ public class DriverHomeActivity extends AppCompatActivity
                 }
             });
         }
+        if(savedInstanceState !=null ){
 
+                location_switch.setChecked(savedInstanceState.getBoolean("ToggleButtonState", false));
+
+        }
         setUpLocation();
     }
 
@@ -276,10 +298,14 @@ public class DriverHomeActivity extends AppCompatActivity
             @Override
             public void run() {
                 if (id == R.id.nav_earnings) {
-                    // Handle the camera action
-                } else if (id == R.id.nav_history) {
-
-                } else if (id == R.id.nav_settings) {
+                    Intent intent = new Intent(DriverHomeActivity.this,DriverEarnings.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    startActivity(intent);
+                }
+//                else if (id == R.id.nav_history) {
+//
+//                }
+                else if (id == R.id.nav_settings) {
                     Intent intent = new Intent(DriverHomeActivity.this, SettingsActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     startActivity(intent);
@@ -665,6 +691,9 @@ public class DriverHomeActivity extends AppCompatActivity
         buildLocationRequests();
         buildLocationCallback();
         mFusedLocationProviderClient.requestLocationUpdates(mLocationRequest, locationCallback, Looper.myLooper());
+        SharedPreferences sharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(getApplicationContext());
+        location_switch.setChecked(sharedPreferences.getBoolean("toggleButton", false));
     }
     private void initMap(){
         Log.d(TAG, "initMap: Initializing map");
@@ -819,5 +848,60 @@ public class DriverHomeActivity extends AppCompatActivity
                 .setIcon(R.drawable.ic_error);
         android.support.v7.app.AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        location_switch.setChecked(bundle.getBoolean("ToggleButtonState",false));
+        SharedPreferences sharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(getApplicationContext());
+        location_switch.setChecked(sharedPreferences.getBoolean("toggleButton", false));
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        location_switch.setChecked(bundle.getBoolean("ToggleButtonState",false));
+        SharedPreferences sharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(getApplicationContext());
+        location_switch.setChecked(sharedPreferences.getBoolean("toggleButton", false));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        SharedPreferences sharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("toggleButton", location_switch.isChecked());
+        editor.commit();
+        bundle.putBoolean("ToggleButtonState", location_switch.isChecked());
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        SharedPreferences sharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("toggleButton", location_switch.isChecked());
+        editor.commit();
+        bundle.putBoolean("ToggleButtonState", location_switch.isChecked());
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        location_switch.setChecked(bundle.getBoolean("ToggleButtonState",false));
+        SharedPreferences sharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(getApplicationContext());
+        location_switch.setChecked(sharedPreferences.getBoolean("toggleButton", false));
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean("ToggleButtonState", location_switch.isChecked());
     }
 }

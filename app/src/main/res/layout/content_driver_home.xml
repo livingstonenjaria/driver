@@ -28,25 +28,39 @@
         app:layout_constraintVertical_bias="0.0"
         tools:context=".MapsActivity" />
 
-    <com.github.glomadrian.materialanimatedswitch.MaterialAnimatedSwitch
-        android:id="@+id/location_switch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="24dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:scaleX="1.5"
-        android:scaleY="1.5"
-        app:ball_press_color="@color/colorWhite"
-        app:ball_release_color="@color/colorWhite"
-        app:base_press_color="@color/colorGreen"
-        app:base_release_color="@color/colorRed"
-        app:icon_press="@drawable/ic_location"
-        app:icon_release="@drawable/ic_location_off_black_24dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+    <!--<com.github.glomadrian.materialanimatedswitch.MaterialAnimatedSwitch-->
+        <!--android:id="@+id/location_switch"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--android:layout_marginBottom="24dp"-->
+        <!--android:layout_marginEnd="8dp"-->
+        <!--android:layout_marginStart="8dp"-->
+        <!--android:scaleX="1.5"-->
+        <!--android:scaleY="1.5"-->
+        <!--app:ball_press_color="@color/colorWhite"-->
+        <!--app:ball_release_color="@color/colorWhite"-->
+        <!--app:base_press_color="@color/colorGreen"-->
+        <!--app:base_release_color="@color/colorRed"-->
+        <!--app:icon_press="@drawable/ic_location"-->
+        <!--app:icon_release="@drawable/ic_location_off_black_24dp"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent" />-->
+
+        <ToggleButton
+            android:id="@+id/location_switch"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="24dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:textOff="Offline"
+            android:textOn="Available"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
     </android.support.constraint.ConstraintLayout>
 </android.support.design.widget.CoordinatorLayout>

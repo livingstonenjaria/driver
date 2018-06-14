@@ -13,6 +13,34 @@
                       <PersistentState>
                         <option name="children">
                           <map>
+                            <entry key="launcher">
+                              <value>
+                                <PersistentState>
+                                  <option name="children">
+                                    <map>
+                                      <entry key="foregroundImage">
+                                        <value>
+                                          <PersistentState>
+                                            <option name="values">
+                                              <map>
+                                                <entry key="scalingPercent" value="63" />
+                                              </map>
+                                            </option>
+                                          </PersistentState>
+                                        </value>
+                                      </entry>
+                                    </map>
+                                  </option>
+                                  <option name="values">
+                                    <map>
+                                      <entry key="backgroundAssetType" value="COLOR" />
+                                      <entry key="backgroundColor" value="ffffff" />
+                                      <entry key="foregroundImage" value="C:\Users\STRUCT\Downloads\icons8-steering-wheel-80.png" />
+                                    </map>
+                                  </option>
+                                </PersistentState>
+                              </value>
+                            </entry>
                             <entry key="launcherLegacy">
                               <value>
                                 <PersistentState>
@@ -55,11 +83,6 @@
                             </entry>
                           </map>
                         </option>
-                        <option name="values">
-                          <map>
-                            <entry key="outputIconType" value="NOTIFICATION" />
-                          </map>
-                        </option>
                       </PersistentState>
                     </value>
                   </entry>
@@ -83,7 +106,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/action/ic_info_outline_black_24dp.xml" />
+                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/navigation/ic_cancel_black_24dp.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -93,8 +116,7 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="color" value="2ecc71" />
-                            <entry key="outputName" value="info" />
+                            <entry key="outputName" value="cancel" />
                             <entry key="sourceFile" value="C:\Users\STRUCT\Downloads\_ionicons_svg_md-lock.svg" />
                           </map>
                         </option>

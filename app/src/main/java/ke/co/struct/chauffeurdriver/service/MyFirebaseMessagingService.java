@@ -11,29 +11,63 @@ import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.google.gson.Gson;
 
+import java.util.Map;
+
 import ke.co.struct.chauffeurdriver.R;
+import ke.co.struct.chauffeurdriver.activities.PaymentActivity;
 import ke.co.struct.chauffeurdriver.activities.RideAlert;
 import ke.co.struct.chauffeurdriver.helper.NotificationHelper;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
-    private String title, body;
+    private static final String TAG = "MyFirebaseMessagingServ";
+    private String title, body,ridertoken;
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        title = remoteMessage.getNotification().getTitle();
-        body = remoteMessage.getNotification().getBody();
-        LatLng rider_location = new Gson().fromJson(remoteMessage.getNotification().getBody(), LatLng.class);
-        Intent intent = new Intent(getBaseContext(), RideAlert.class);
-        intent.putExtra("lat", rider_location.latitude);
-        intent.putExtra("lng", rider_location.longitude);
-        intent.putExtra("rider",remoteMessage.getNotification().getTitle());
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
+        if (remoteMessage.getData().size() > 0){
+            title = remoteMessage.getData().get("title");
+            Map<String,String> payload = remoteMessage.getData();
+            body = remoteMessage.getData().get("message");
+            Log.d(TAG, "onMessageReceived: ");
+            showNotification(body);
+            if(title.equals("Ride Request")){
+                LatLng rider_location = new Gson().fromJson(remoteMessage.getData().get("location"), LatLng.class);
+                LatLng destination = new Gson().fromJson(remoteMessage.getData().get("destination"), LatLng.class);
+                String name = remoteMessage.getData().get("name");
+                String phone = remoteMessage.getData().get("phone");
+                Intent intent = new Intent(getBaseContext(), RideAlert.class);
+                intent.putExtra("lat", rider_location.latitude);
+                intent.putExtra("lng", rider_location.longitude);
+                intent.putExtra("destlat", destination.longitude);
+                intent.putExtra("destlng", destination.longitude);
+                intent.putExtra("rider",remoteMessage.getData().get("ridertoken"));
+                intent.putExtra("name",name);
+                intent.putExtra("phone",phone);
+                intent.putExtra("pushid",remoteMessage.getData().get("pushid"));
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+            if (title.equals("Total Ride Cost")) {
+                String title = payload.get("title");
+                String content = payload.get("content");
+                String refnum = payload.get("refnum");
+                String pushid = payload.get("pushid");
+                Intent intent = new Intent(getApplicationContext(), PaymentActivity.class);
+                intent.putExtra("title",title);
+                intent.putExtra("content",content);
+                intent.putExtra("refnum",refnum);
+                intent.putExtra("pushid",pushid);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                showNotification(content);
+            }
+        }
     }
     @RequiresApi(api = Build.VERSION_CODES.O)
     private  void showNotificationsAPI26(String message){
