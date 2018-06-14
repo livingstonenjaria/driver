@@ -41,15 +41,20 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 LatLng destination = new Gson().fromJson(remoteMessage.getData().get("destination"), LatLng.class);
                 String name = remoteMessage.getData().get("name");
                 String phone = remoteMessage.getData().get("phone");
+                String ridertoken = remoteMessage.getData().get("ridertoken");
+                String riderid = remoteMessage.getData().get("riderid");
+                String pushid = remoteMessage.getData().get("pushid");
                 Intent intent = new Intent(getBaseContext(), RideAlert.class);
                 intent.putExtra("lat", rider_location.latitude);
                 intent.putExtra("lng", rider_location.longitude);
                 intent.putExtra("destlat", destination.longitude);
                 intent.putExtra("destlng", destination.longitude);
-                intent.putExtra("rider",remoteMessage.getData().get("ridertoken"));
+                intent.putExtra("ridertoken",ridertoken);
+                intent.putExtra("rider",riderid);
+                intent.putExtra("pushid",pushid);
                 intent.putExtra("name",name);
                 intent.putExtra("phone",phone);
-                intent.putExtra("pushid",remoteMessage.getData().get("pushid"));
+
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }

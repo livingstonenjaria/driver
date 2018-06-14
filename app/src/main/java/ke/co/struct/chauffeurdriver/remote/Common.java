@@ -12,6 +12,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
 import ke.co.struct.chauffeurdriver.model.Driver;
+import ke.co.struct.chauffeurdriver.model.RequestInfo;
 
 public class Common {
     public static final String drivers_available = "driversavailable";
@@ -22,6 +23,7 @@ public class Common {
     public static  Double trip = 0.0;
     public static final int PICK_IMAGE_REQUEST = 9999;
     public static Driver current_driver;
+    public static RequestInfo request;
     public static FirebaseAuth auth = FirebaseAuth.getInstance();
     public static FirebaseDatabase database = FirebaseDatabase.getInstance();
     public static Location mLastLocation = null;

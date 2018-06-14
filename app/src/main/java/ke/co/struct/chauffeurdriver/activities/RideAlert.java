@@ -40,7 +40,7 @@ public class RideAlert extends AppCompatActivity {
     private MGoogleApi mService;
     private IFCMService ifcmService;
     private Button btnAccept, btnDecline;
-    private String riderid, phone, name, pushid;
+    private String riderid, phone, name, pushid,ridertoken;
     private Double lat,lng,destlat,destlng;
     private Driver driver;
 
@@ -66,6 +66,7 @@ public class RideAlert extends AppCompatActivity {
              lat = getIntent().getDoubleExtra("lat", -1.0);
              lng = getIntent().getDoubleExtra("lng", -1.0);
             riderid = getIntent().getStringExtra("rider");
+            ridertoken = getIntent().getStringExtra("ridertoken");
             name = getIntent().getStringExtra("name");
             phone = getIntent().getStringExtra("phone");
             pushid = getIntent().getStringExtra("pushid");
@@ -79,18 +80,19 @@ public class RideAlert extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!TextUtils.isEmpty(riderid)){
-                    cancelBooking(riderid);
+                    cancelBooking(ridertoken);
                 }
             }
         });
         btnAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendDriverDetails(riderid);
+                sendDriverDetails(ridertoken);
                 Intent intent = new Intent(RideAlert.this, DriverTrackingActivity.class);
                 intent.putExtra("lat",lat);
                 intent.putExtra("lng",lng);
-                intent.putExtra("rider",riderid);
+                intent.putExtra("ridertoken",ridertoken);
+                intent.putExtra("riderid",riderid);
                 intent.putExtra("name",name);
                 intent.putExtra("phone",phone);
                 intent.putExtra("pushid", pushid);
@@ -102,9 +104,9 @@ public class RideAlert extends AppCompatActivity {
         });
     }
 
-    private void sendDriverDetails(String riderid) {
+    private void sendDriverDetails(String ridertoken) {
         driver = Common.current_driver;
-        Token token = new Token(riderid);
+        Token token = new Token(ridertoken);
         JSONObject details = new JSONObject();
         try {
                 details.put("name",driver.getName());

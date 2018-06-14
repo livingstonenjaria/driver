@@ -55,6 +55,7 @@ import com.google.android.gms.maps.model.RoundCap;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONArray;
@@ -70,6 +71,7 @@ import java.util.concurrent.ExecutionException;
 import ke.co.struct.chauffeurdriver.R;
 import ke.co.struct.chauffeurdriver.model.DataMessage;
 import ke.co.struct.chauffeurdriver.model.GetPlace;
+import ke.co.struct.chauffeurdriver.model.RequestInfo;
 import ke.co.struct.chauffeurdriver.remote.Common;
 import ke.co.struct.chauffeurdriver.remote.IFCMService;
 import ke.co.struct.chauffeurdriver.remote.MGoogleApi;
@@ -111,12 +113,12 @@ public class DriverTrackingActivity extends FragmentActivity implements OnMapRea
     private Double trip = 0.0;
     private Polyline direction;
 
-    private String userid,riderid,phone,pushid;
+    private String userid,riderid,ridertoken,phone,pushid,paymentMethod;
     private MGoogleApi mService;
     private IFCMService ifcmService;
     private FloatingActionButton fabcall, fabcancel;
     private Button startride,endride;
-    private Double  lat,lng;
+    private Double  lat,lng,destinationLat,destinationLng;
     String startAddress, endAddress, actualPickup;
 
 
@@ -143,11 +145,11 @@ public class DriverTrackingActivity extends FragmentActivity implements OnMapRea
             riderlng = getIntent().getDoubleExtra("lng", -1.0);
             lat = getIntent().getDoubleExtra("destlat", -1.0);
             lng = getIntent().getDoubleExtra("destlng", -1.0);
-            riderid = getIntent().getStringExtra("rider");
+            ridertoken = getIntent().getStringExtra("ridertoken");
+            riderid = getIntent().getStringExtra("riderid");
             phone = getIntent().getStringExtra("phone");
             pushid = getIntent().getStringExtra("pushid");
             getRiderRequestInfo(pushid,riderid);
-
         }
         fabcall = findViewById(R.id.fabcall);
         fabcancel = findViewById(R.id.fabcancel);
@@ -194,12 +196,26 @@ public class DriverTrackingActivity extends FragmentActivity implements OnMapRea
             riderMarker.remove();
         }
         rideStarted = true;
+        DatabaseReference riderinfo = Common.database.getReference().child("riderRequest").child(pushid).child(riderid);
+        riderinfo.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    Common.request = dataSnapshot.getValue(RequestInfo.class);
+                }
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
         DatabaseReference rideStart = Common.database.getReference().child("ridestarted").child(pushid).child(userid).child(riderid);
         HashMap<String,Object> map = new HashMap<>();
-        map.put("destination",endAddress);
-        map.put("setpickUp",startAddress);
+        map.put("destination",Common.request.getRiderDestination());
+        map.put("setpickUp",Common.request.getRiderLocation());
         map.put("actualpickUp", actualPickup);
+        map.put("time", ServerValue.TIMESTAMP);
         rideStart.updateChildren(map);
 //        DatabaseReference driverEnrouteRef = Common.database.getReference().child("driversenroute");
 //        GeoFire geoFire = new GeoFire(driverEnrouteRef);
@@ -597,16 +613,16 @@ public class DriverTrackingActivity extends FragmentActivity implements OnMapRea
                     if (map.get("riderDestination") != null) {
                         endAddress = map.get("riderDestination").toString();
                     }
-//                    if (map.get("paymentMethod") != null) {
-//                        mPayment = map.get("paymentMethod").toString();
-//                        paymentMethod.setText(mPayment);
-//                    }
-//                    if (map.get("destinationLat") != null) {
-//                        destinationLat = Double.parseDouble(map.get("destinationLat").toString());
-//                    }
-//                    if (map.get("destinationLng") != null) {
-//                        destinationLng =  Double.parseDouble(map.get("destinationLng").toString());
-//                    }
+                    if (map.get("paymentMethod") != null) {
+                        paymentMethod = map.get("paymentMethod").toString();
+
+                    }
+                    if (map.get("destinationLat") != null) {
+                        destinationLat = Double.parseDouble(map.get("destinationLat").toString());
+                    }
+                    if (map.get("destinationLng") != null) {
+                        destinationLng =  Double.parseDouble(map.get("destinationLng").toString());
+                    }
                 }
             }
             @Override
